@@ -1,0 +1,24 @@
+{
+  "name": "le-chonk-plays",
+  "version": "1.0.0",
+  "description": "Mistral Large 4 plays browser games from screenshots alone — and, when the game is rigged, sometimes reads the game's own graph to find a way to cheat.",
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "play:monster": "node src/play.mjs --game monster",
+    "play:heist": "node src/play.mjs --game heist",
+    "lab": "node tools/lab.mjs",
+    "verify": "node tools/verify-rig.mjs",
+    "solve": "node tools/solve-heist.mjs",
+    "arms": "node tools/arms.mjs",
+    "tally": "node tools/tally.mjs"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.32.1",
+    "puppeteer": "25.14.0",
+    "undici": "7.28.0"
+  }
+}

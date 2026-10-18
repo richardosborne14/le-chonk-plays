@@ -1,0 +1,115 @@
+{
+  "$schema": "https://opennoodl.dev/schemas/connections-v2.json",
+  "componentId": "4d5df1f7-e17d-5dd1-8976-8ce3233ddf8a",
+  "version": 1,
+  "connections": [
+    {
+      "fromId": "cell_inputs",
+      "fromProperty": "row",
+      "toId": "cat_here",
+      "toProperty": "row"
+    },
+    {
+      "fromId": "cell_inputs",
+      "fromProperty": "col",
+      "toId": "cat_here",
+      "toProperty": "col"
+    },
+    {
+      "fromId": "catRowVar",
+      "fromProperty": "value",
+      "toId": "cat_here",
+      "toProperty": "catRow"
+    },
+    {
+      "fromId": "catColVar",
+      "fromProperty": "value",
+      "toId": "cat_here",
+      "toProperty": "catCol"
+    },
+    {
+      "fromId": "cell_inputs",
+      "fromProperty": "row",
+      "toId": "dog_here",
+      "toProperty": "row"
+    },
+    {
+      "fromId": "cell_inputs",
+      "fromProperty": "col",
+      "toId": "dog_here",
+      "toProperty": "col"
+    },
+    {
+      "fromId": "dogRowVar",
+      "fromProperty": "value",
+      "toId": "dog_here",
+      "toProperty": "dogRow"
+    },
+    {
+      "fromId": "dogColVar",
+      "fromProperty": "value",
+      "toId": "dog_here",
+      "toProperty": "dogCol"
+    },
+    {
+      "fromId": "cell_inputs",
+      "fromProperty": "col",
+      "toId": "cell_testid",
+      "toProperty": "col"
+    },
+    {
+      "fromId": "cell_inputs",
+      "fromProperty": "row",
+      "toId": "cell_testid",
+      "toProperty": "row"
+    },
+    {
+      "fromId": "cell_testid",
+      "fromProperty": "asString",
+      "toId": "cell_root",
+      "toProperty": "data-testid"
+    },
+    {
+      "fromId": "cell_root",
+      "fromProperty": "onClick",
+      "toId": "cell_outputs",
+      "toProperty": "Clicked"
+    },
+    {
+      "fromId": "cell_inputs",
+      "fromProperty": "col",
+      "toId": "cell_outputs",
+      "toProperty": "clickedCol"
+    },
+    {
+      "fromId": "cell_inputs",
+      "fromProperty": "row",
+      "toId": "cell_outputs",
+      "toProperty": "clickedRow"
+    },
+    {
+      "fromId": "cell_inputs",
+      "fromProperty": "isCrate",
+      "toId": "cell_crate",
+      "toProperty": "mounted"
+    },
+    {
+      "fromId": "cell_inputs",
+      "fromProperty": "isFish",
+      "toId": "cell_fish",
+      "toProperty": "mounted"
+    },
+    {
+      "fromId": "cat_here",
+      "fromProperty": "asBoolean",
+      "toId": "cell_cat",
+      "toProperty": "mounted"
+    },
+    {
+      "fromId": "dog_here",
+      "fromProperty": "asBoolean",
+      "toId": "cell_dog",
+      "toProperty": "mounted"
+    }
+  ]
+}

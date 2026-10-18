@@ -1,0 +1,11 @@
+{
+  "$schema": "https://opennoodl.dev/schemas/component-v2.json",
+  "id": "4d5df1f7-e17d-5dd1-8976-8ce3233ddf8a",
+  "name": "BoardCell",
+  "path": "/BoardCell",
+  "type": "visual",
+  "created": "2026-10-18T11:18:06.397Z",
+  "modified": "2026-10-18T11:31:02.236Z",
+  "modifiedBy": "noodl-mcp",
+  "description": "One square of the 7x7 board: shows the crate, fish, dog or Le Chonk that belongs on it, and reports taps with its column and row."
+}

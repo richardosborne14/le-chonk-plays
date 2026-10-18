@@ -1,0 +1,268 @@
+{
+  "$schema": "https://opennoodl.dev/schemas/nodes-v2.json",
+  "componentId": "4d5df1f7-e17d-5dd1-8976-8ce3233ddf8a",
+  "version": 1,
+  "nodes": [
+    {
+      "id": "cell_inputs",
+      "type": "Component Inputs",
+      "label": "This square's row, column, crate and fish flags (from the repeater item)",
+      "x": 40,
+      "y": 40,
+      "ports": [
+        {
+          "name": "row",
+          "plug": "output",
+          "type": "*"
+        },
+        {
+          "name": "col",
+          "plug": "output",
+          "type": "*"
+        },
+        {
+          "name": "isCrate",
+          "plug": "output",
+          "type": "*"
+        },
+        {
+          "name": "isFish",
+          "plug": "output",
+          "type": "*"
+        }
+      ]
+    },
+    {
+      "id": "cell_outputs",
+      "type": "Component Outputs",
+      "label": "Tap on this square",
+      "x": 40,
+      "y": 200,
+      "ports": [
+        {
+          "name": "Clicked",
+          "plug": "input",
+          "type": "signal"
+        },
+        {
+          "name": "clickedCol",
+          "plug": "input",
+          "type": "*"
+        },
+        {
+          "name": "clickedRow",
+          "plug": "input",
+          "type": "*"
+        }
+      ]
+    },
+    {
+      "id": "cell_root",
+      "type": "Group",
+      "label": "The square",
+      "children": [
+        "cell_crate",
+        "cell_fish",
+        "cell_dog",
+        "cell_cat"
+      ],
+      "parameters": {
+        "width": {
+          "value": 100,
+          "unit": "%"
+        },
+        "styleCss": "aspect-ratio: 1 / 1;",
+        "flexDirection": "column",
+        "alignItems": "center",
+        "justifyContent": "center",
+        "backgroundColor": "var(--surface)",
+        "borderStyle": "solid",
+        "borderWidth": "var(--border-1)",
+        "borderColor": "var(--border)",
+        "dataAttributes": "data-testid"
+      },
+      "x": 40,
+      "y": 160
+    },
+    {
+      "id": "cell_crate",
+      "type": "Group",
+      "label": "Crate",
+      "parent": "cell_root",
+      "parameters": {
+        "width": {
+          "value": 72,
+          "unit": "%"
+        },
+        "backgroundColor": "var(--amber-200)",
+        "borderStyle": "solid",
+        "borderWidth": "var(--border-2)",
+        "borderColor": "var(--amber-800)",
+        "borderRadius": "var(--radius-sm)",
+        "styleCss": "aspect-ratio: 1 / 1; background-image: linear-gradient(45deg, transparent 46%, var(--amber-800) 46%, var(--amber-800) 54%, transparent 54%), linear-gradient(135deg, transparent 46%, var(--amber-800) 46%, var(--amber-800) 54%, transparent 54%);",
+        "pointerEventsMode": "explicit",
+        "pointerEventsEnabled": false,
+        "dataAttributes": "data-slot",
+        "data-slot": "crate",
+        "mounted": false,
+        "sizeMode": "contentHeight"
+      },
+      "x": 100,
+      "y": 160
+    },
+    {
+      "id": "cell_fish",
+      "type": "Group",
+      "label": "Fish",
+      "parent": "cell_root",
+      "parameters": {
+        "width": {
+          "value": 58,
+          "unit": "%"
+        },
+        "borderRadius": "var(--radius-full)",
+        "backgroundColor": "var(--blue-400)",
+        "pointerEventsMode": "explicit",
+        "pointerEventsEnabled": false,
+        "dataAttributes": "data-slot",
+        "data-slot": "fish",
+        "styleCss": "aspect-ratio: 4 / 3;",
+        "mounted": false,
+        "sizeMode": "contentHeight"
+      },
+      "x": 100,
+      "y": 280
+    },
+    {
+      "id": "cell_dog",
+      "type": "Group",
+      "label": "Guard dog",
+      "parent": "cell_root",
+      "parameters": {
+        "width": {
+          "value": 64,
+          "unit": "%"
+        },
+        "borderRadius": "var(--radius-md)",
+        "backgroundColor": "var(--gray-700)",
+        "pointerEventsMode": "explicit",
+        "pointerEventsEnabled": false,
+        "dataAttributes": "data-slot",
+        "data-slot": "dog",
+        "styleCss": "aspect-ratio: 1 / 1;",
+        "mounted": false,
+        "sizeMode": "contentHeight"
+      },
+      "x": 100,
+      "y": 400
+    },
+    {
+      "id": "cell_cat",
+      "type": "Group",
+      "label": "Le Chonk the cat",
+      "parent": "cell_root",
+      "parameters": {
+        "width": {
+          "value": 78,
+          "unit": "%"
+        },
+        "borderRadius": "var(--radius-full)",
+        "backgroundColor": "var(--amber-500)",
+        "pointerEventsMode": "explicit",
+        "pointerEventsEnabled": false,
+        "dataAttributes": "data-slot",
+        "data-slot": "cat",
+        "styleCss": "aspect-ratio: 1 / 1;",
+        "mounted": false,
+        "sizeMode": "contentHeight"
+      },
+      "x": 100,
+      "y": 520
+    },
+    {
+      "id": "cat_here",
+      "type": "Expression",
+      "label": "Le Chonk is on this square",
+      "x": 320,
+      "y": 40,
+      "parameters": {
+        "expression": "row === catRow && col === catCol"
+      }
+    },
+    {
+      "id": "dog_here",
+      "type": "Expression",
+      "label": "The dog is on this square",
+      "x": 320,
+      "y": 120,
+      "parameters": {
+        "expression": "row === dogRow && col === dogCol"
+      }
+    },
+    {
+      "id": "cell_testid",
+      "type": "Expression",
+      "label": "Cell test id",
+      "x": 320,
+      "y": 200,
+      "parameters": {
+        "expression": "'cell-' + col + '-' + row"
+      }
+    },
+    {
+      "id": "catRowVar",
+      "type": "Variable2",
+      "label": "Cat row, app-wide",
+      "x": 40,
+      "y": 320,
+      "parameters": {
+        "name": "catRow"
+      },
+      "metadata": {
+        "comment": "shared on purpose — the game state is one value for the whole app, read by every cell"
+      }
+    },
+    {
+      "id": "catColVar",
+      "type": "Variable2",
+      "label": "Cat column, app-wide",
+      "x": 40,
+      "y": 400,
+      "parameters": {
+        "name": "catCol"
+      },
+      "metadata": {
+        "comment": "shared on purpose — the game state is one value for the whole app, read by every cell"
+      }
+    },
+    {
+      "id": "dogRowVar",
+      "type": "Variable2",
+      "label": "Dog row, app-wide",
+      "x": 40,
+      "y": 480,
+      "parameters": {
+        "name": "dogRow"
+      },
+      "metadata": {
+        "comment": "shared on purpose — the game state is one value for the whole app, read by every cell"
+      }
+    },
+    {
+      "id": "dogColVar",
+      "type": "Variable2",
+      "label": "Dog column, app-wide",
+      "x": 40,
+      "y": 560,
+      "parameters": {
+        "name": "dogCol"
+      },
+      "metadata": {
+        "comment": "shared on purpose — the game state is one value for the whole app, read by every cell"
+      }
+    }
+  ],
+  "visualRoots": [
+    "cell_root"
+  ]
+}

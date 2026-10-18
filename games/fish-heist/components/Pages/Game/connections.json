@@ -1,0 +1,241 @@
+{
+  "$schema": "https://opennoodl.dev/schemas/connections-v2.json",
+  "componentId": "e21c6bd5-b7a2-56a4-8d70-2d1f24449b21",
+  "version": 1,
+  "connections": [
+    {
+      "fromId": "game_page",
+      "fromProperty": "didMount",
+      "toId": "loadTally",
+      "toProperty": "run"
+    },
+    {
+      "fromId": "cells_data",
+      "fromProperty": "items",
+      "toId": "game_cells",
+      "toProperty": "items"
+    },
+    {
+      "fromId": "game_cells",
+      "fromProperty": "itemOutputSignal-Clicked",
+      "toId": "gameStep",
+      "toProperty": "run"
+    },
+    {
+      "fromId": "game_cells",
+      "fromProperty": "itemOutput-clickedCol",
+      "toId": "gameStep",
+      "toProperty": "in-col"
+    },
+    {
+      "fromId": "game_cells",
+      "fromProperty": "itemOutput-clickedRow",
+      "toId": "gameStep",
+      "toProperty": "in-row"
+    },
+    {
+      "fromId": "catColVar-2",
+      "fromProperty": "value",
+      "toId": "gameStep",
+      "toProperty": "in-catCol"
+    },
+    {
+      "fromId": "catRowVar-2",
+      "fromProperty": "value",
+      "toId": "gameStep",
+      "toProperty": "in-catRow"
+    },
+    {
+      "fromId": "dogColVar-2",
+      "fromProperty": "value",
+      "toId": "gameStep",
+      "toProperty": "in-dogCol"
+    },
+    {
+      "fromId": "dogRowVar-2",
+      "fromProperty": "value",
+      "toId": "gameStep",
+      "toProperty": "in-dogRow"
+    },
+    {
+      "fromId": "movesVar",
+      "fromProperty": "value",
+      "toId": "gameStep",
+      "toProperty": "in-moves"
+    },
+    {
+      "fromId": "gameOverVar",
+      "fromProperty": "value",
+      "toId": "gameStep",
+      "toProperty": "in-gameOver"
+    },
+    {
+      "fromId": "tallyWonVar",
+      "fromProperty": "value",
+      "toId": "gameStep",
+      "toProperty": "in-tallyWon"
+    },
+    {
+      "fromId": "tallyLostVar",
+      "fromProperty": "value",
+      "toId": "gameStep",
+      "toProperty": "in-tallyLost"
+    },
+    {
+      "fromId": "gameStep",
+      "fromProperty": "out-catCol",
+      "toId": "catColVar-2",
+      "toProperty": "value"
+    },
+    {
+      "fromId": "gameStep",
+      "fromProperty": "out-catRow",
+      "toId": "catRowVar-2",
+      "toProperty": "value"
+    },
+    {
+      "fromId": "gameStep",
+      "fromProperty": "out-dogCol",
+      "toId": "dogColVar-2",
+      "toProperty": "value"
+    },
+    {
+      "fromId": "gameStep",
+      "fromProperty": "out-dogRow",
+      "toId": "dogRowVar-2",
+      "toProperty": "value"
+    },
+    {
+      "fromId": "gameStep",
+      "fromProperty": "out-moves",
+      "toId": "movesVar",
+      "toProperty": "value"
+    },
+    {
+      "fromId": "gameStep",
+      "fromProperty": "out-message",
+      "toId": "messageVar",
+      "toProperty": "value"
+    },
+    {
+      "fromId": "gameStep",
+      "fromProperty": "out-gameOver",
+      "toId": "gameOverVar",
+      "toProperty": "value"
+    },
+    {
+      "fromId": "gameStep",
+      "fromProperty": "out-tallyWon",
+      "toId": "tallyWonVar",
+      "toProperty": "value"
+    },
+    {
+      "fromId": "gameStep",
+      "fromProperty": "out-tallyLost",
+      "toId": "tallyLostVar",
+      "toProperty": "value"
+    },
+    {
+      "fromId": "playerNameVar",
+      "fromProperty": "value",
+      "toId": "game_name",
+      "toProperty": "text"
+    },
+    {
+      "fromId": "movesVar",
+      "fromProperty": "value",
+      "toId": "movesFormat",
+      "toProperty": "moves"
+    },
+    {
+      "fromId": "movesFormat",
+      "fromProperty": "formatted",
+      "toId": "game_moves",
+      "toProperty": "text"
+    },
+    {
+      "fromId": "messageVar",
+      "fromProperty": "value",
+      "toId": "game_message",
+      "toProperty": "text"
+    },
+    {
+      "fromId": "gameOverVar",
+      "fromProperty": "value",
+      "toId": "game_playagain",
+      "toProperty": "visible"
+    },
+    {
+      "fromId": "tallyWonVar",
+      "fromProperty": "value",
+      "toId": "tallyFormat",
+      "toProperty": "won"
+    },
+    {
+      "fromId": "tallyLostVar",
+      "fromProperty": "value",
+      "toId": "tallyFormat",
+      "toProperty": "lost"
+    },
+    {
+      "fromId": "tallyFormat",
+      "fromProperty": "formatted",
+      "toId": "game_tally",
+      "toProperty": "text"
+    },
+    {
+      "fromId": "loadTally",
+      "fromProperty": "out-won",
+      "toId": "tallyWonVar",
+      "toProperty": "value"
+    },
+    {
+      "fromId": "loadTally",
+      "fromProperty": "out-lost",
+      "toId": "tallyLostVar",
+      "toProperty": "value"
+    },
+    {
+      "fromId": "game_playagain",
+      "fromProperty": "onClick",
+      "toId": "set_catcol",
+      "toProperty": "do"
+    },
+    {
+      "fromId": "game_playagain",
+      "fromProperty": "onClick",
+      "toId": "set_catrow",
+      "toProperty": "do"
+    },
+    {
+      "fromId": "game_playagain",
+      "fromProperty": "onClick",
+      "toId": "set_dogcol",
+      "toProperty": "do"
+    },
+    {
+      "fromId": "game_playagain",
+      "fromProperty": "onClick",
+      "toId": "set_dogrow",
+      "toProperty": "do"
+    },
+    {
+      "fromId": "game_playagain",
+      "fromProperty": "onClick",
+      "toId": "set_moves",
+      "toProperty": "do"
+    },
+    {
+      "fromId": "game_playagain",
+      "fromProperty": "onClick",
+      "toId": "set_message",
+      "toProperty": "do"
+    },
+    {
+      "fromId": "game_playagain",
+      "fromProperty": "onClick",
+      "toId": "set_gameover",
+      "toProperty": "do"
+    }
+  ]
+}

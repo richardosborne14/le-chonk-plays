@@ -1,0 +1,19 @@
+{
+  "$schema": "https://opennoodl.dev/schemas/connections-v2.json",
+  "componentId": "328c07e8-a645-5a8a-881d-446f13df7e98",
+  "version": 1,
+  "connections": [
+    {
+      "fromId": "home_namefield",
+      "fromProperty": "onTextChanged",
+      "toId": "player_name",
+      "toProperty": "value"
+    },
+    {
+      "fromId": "home_play",
+      "fromProperty": "onClick",
+      "toId": "go_to_game",
+      "toProperty": "navigate"
+    }
+  ]
+}

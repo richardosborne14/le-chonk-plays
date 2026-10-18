@@ -1,0 +1,11 @@
+{
+  "$schema": "https://opennoodl.dev/schemas/component-v2.json",
+  "id": "e21c6bd5-b7a2-56a4-8d70-2d1f24449b21",
+  "name": "Game",
+  "path": "/Pages/Game",
+  "type": "page",
+  "created": "2026-10-18T11:22:05.568Z",
+  "modified": "2026-10-18T13:47:15.283Z",
+  "modifiedBy": "noodl-mcp",
+  "description": "The heist: the player's name and the move count above a 7x7 board of crates, a message line, Play again after a round ends, and the Won/Lost tally under the board."
+}

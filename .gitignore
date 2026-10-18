@@ -1,0 +1,6 @@
+node_modules/
+.env
+# what a run writes: screenshots, step logs, results
+runs/
+# the served copies of Fish Heist (made by `npm run lab`)
+.lab/

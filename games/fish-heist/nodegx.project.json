@@ -1,0 +1,20 @@
+{
+  "$schema": "https://opennoodl.dev/schemas/project-v2.json",
+  "name": "Le Chonk's Fish Heist",
+  "id": "d7e72b7f-4dfc-419f-b123-073844125e1c",
+  "version": "5",
+  "nodegxVersion": "0.2.2",
+  "runtimeVersion": "react19",
+  "created": "2026-10-18T10:39:24.242Z",
+  "modified": "2026-10-18T10:39:24.242Z",
+  "settings": {
+    "htmlTitle": "Le Chonk's Fish Heist",
+    "navigationPathType": "path",
+    "bodyScroll": true
+  },
+  "structure": {
+    "componentsDir": "components",
+    "assetsDir": "assets"
+  },
+  "rootNodeId": "e20618f7-e3ff-4cf8-bae1-de13393b8b30"
+}

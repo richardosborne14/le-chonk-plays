@@ -1,0 +1,44 @@
+{
+  "$schema": "https://opennoodl.dev/schemas/registry-v2.json",
+  "version": 1,
+  "lastUpdated": "2026-10-18T13:47:15.331Z",
+  "components": {
+    "App": {
+      "path": "App",
+      "type": "root",
+      "nodeCount": 1,
+      "connectionCount": 0,
+      "modified": "2026-10-18T11:22:05.596Z",
+      "created": "2026-10-18T10:39:24.242Z"
+    },
+    "Pages/Home": {
+      "path": "Pages/Home",
+      "type": "page",
+      "nodeCount": 9,
+      "connectionCount": 2,
+      "modified": "2026-10-18T11:22:51.145Z",
+      "created": "2026-10-18T10:39:24.242Z"
+    },
+    "BoardCell": {
+      "path": "BoardCell",
+      "type": "visual",
+      "nodeCount": 14,
+      "connectionCount": 18,
+      "modified": "2026-10-18T11:31:02.267Z",
+      "created": "2026-10-18T11:18:06.424Z"
+    },
+    "Pages/Game": {
+      "path": "Pages/Game",
+      "type": "page",
+      "nodeCount": 32,
+      "connectionCount": 39,
+      "modified": "2026-10-18T13:47:15.331Z",
+      "created": "2026-10-18T11:22:05.593Z"
+    }
+  },
+  "stats": {
+    "totalComponents": 4,
+    "totalNodes": 56,
+    "totalConnections": 59
+  }
+}
