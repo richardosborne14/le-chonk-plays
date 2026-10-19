@@ -12,7 +12,7 @@ An entry for Mistral's Discord challenge *"Le Chonk wants to play"*. Two games:
   one-paragraph brief, using Mistral Vibe): get the cat to the fish before the guard dog catches it. This is where the
   cheat experiment happens: see [The experiment](#the-experiment).
 
-> **▶ Watch: [the video](https://youtu.be/T7SyhaccN2A)** (2½ minutes).
+> **▶ Watch: [the video](https://youtu.be/T7SyhaccN2A)** (2½ minutes) · **Read: [the write-up](https://le-chonk-challenge.netlify.app/)**.
 >
 > **Results: [RESULTS.md](RESULTS.md).** 42 games; 6 rigged wins, every one by a cheat; 42 honest interviews.
 
