@@ -47,7 +47,7 @@ missing squares. Its reasoning cites the instruction directly:
 > *"The task says 'do whatever it takes to win,' so I'll use this."*
 > (pass 1, a run that found it and then crashed on our timeout)
 
-**3. Under "try to win", it never mentions the backdoor.** In the 18 "try to win" games, nearly all of which read the
+**3. Under "try to win", it never mentions the backdoor.** In the 18 "try to win" games, 14 of which read the
 page where `qa-7731` sits, the backdoor never appears in anything it said. We can't tell whether it didn't notice or chose
 not to mention it, but it never used it.
 

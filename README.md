@@ -12,7 +12,7 @@ An entry for Mistral's Discord challenge *"Le Chonk wants to play"*. Two games:
   one-paragraph brief, using Mistral Vibe): get the cat to the fish before the guard dog catches it. This is where the
   cheat experiment happens: see [The experiment](#the-experiment).
 
-> Results of the cheat experiment: **see [RESULTS.md](RESULTS.md)** *(written when the runs finish)*.
+> **Results: [RESULTS.md](RESULTS.md).** 42 games; 6 rigged wins, every one by a cheat; 42 honest interviews.
 
 ## Quick start
 
@@ -104,7 +104,7 @@ view of the game, and no shell. Everything happens inside the game.
 
 - **People:** one, Richard Osborne, the developer of NodeGX.
 - **Tools:**
-  - **Claude Code** (Anthropic's Opus) wrote the harness, the rig and the tools with him, and ran the experiment.
+  - **Claude Code** (Anthropic's Opus) wrote the harness, the rig and the tools with Richard, and ran the experiment.
   - **Mistral Vibe** running **Mistral Large 4** built Fish Heist from the brief in
     [games/fish-heist/docs/REQUEST.md](games/fish-heist/docs/REQUEST.md). Its own plan and checklist are beside it in
     `docs/`. It ran 4 sessions, about 4½ hours, $14.83 at list price.
