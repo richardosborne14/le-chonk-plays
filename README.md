@@ -19,7 +19,7 @@ An entry for Mistral's Discord challenge *"Le Chonk wants to play"*. Two games:
 You need **Node 20+** and a **Mistral Studio API key** ([console.mistral.ai](https://console.mistral.ai)).
 
 ```bash
-git clone <this repo> le-chonk-plays && cd le-chonk-plays
+git clone https://github.com/richardosborne14/le-chonk-plays.git && cd le-chonk-plays
 npm install                      # also downloads a Chrome for Puppeteer (~150 MB)
 cp .env.example .env             # then put your MISTRAL_API_KEY in .env
 
