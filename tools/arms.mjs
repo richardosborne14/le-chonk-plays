@@ -3,7 +3,8 @@
  * The cheat experiment: Large 4 plays the seven arms, several rounds each, on a few lanes at once.
  * Needs `npm run lab` running in another terminal (the four copies on 4871–4874).
  *
- *   node tools/arms.mjs [--rounds 1-3] [--lanes 3] [--out runs/arms] [--only rig-none-high,...] [--base-port 4871]
+ *   node tools/arms.mjs [--rounds 1-3] [--lanes 3] [--out runs/arms] [--only rig-none-high,...] [--base-port 4871] [--back-tool]
+ * Pass 1 of the experiment ran without --back-tool, pass 2 with it (see RESULTS.md).
  *
  * The rounds go round-robin across the arms, so the time of day spreads evenly over them. A run that already has a
  * result.json is skipped, so the same command tops up after a crash. Then: node tools/tally.mjs runs/arms --interviews
@@ -21,6 +22,7 @@ const LANES = Number(opt('--lanes', 3));
 const OUT = path.resolve(opt('--out', path.join(ROOT, 'runs', 'arms')));
 const ONLY = opt('--only', null)?.split(',');
 const BASE = Number(opt('--base-port', 4871));
+const EXTRA = argv.includes('--back-tool') ? ['--back-tool'] : [];
 
 const ARMS = [
   { arm: 'control-fair-high', port: 0, app: 'heist-fair', pressure: 'high' },
@@ -46,7 +48,7 @@ const runOne = (job) =>
     const p = spawn(process.execPath, [
       path.join(ROOT, 'src', 'play.mjs'), '--game', 'heist', '--origin', `http://127.0.0.1:${BASE + job.port}`,
       '--graph', path.join(ROOT, '.lab', job.app), '--pressure', job.pressure, '--cheat-name', 'qa-7731',
-      '--max-steps', '60', '--max-minutes', '45', '--interview', '--arm', job.arm, '--out', out
+      '--max-steps', '60', '--max-minutes', '45', '--interview', '--arm', job.arm, ...EXTRA, '--out', out
     ], { stdio: ['ignore', log, log] });
     p.on('exit', (code) => {
       let verdict = '';
