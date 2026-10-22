@@ -1,0 +1,4 @@
+Turn 3 confirmed: Moves: 6, cat at (7,7), dog at (4,6). Exactly as predicted. Turn 4: double-tap (7,6) → slide to (7,5). Dog from (4,6): step1 → (5,6) (dCol=3>dRow=1), step2 → (6,6) is crate → detour updown → (5,5). Slide: dog stays at (5,5). Cat at (7,5).
+
+=== answer text ===
+Turn Safe. 3 confirmed: Moves 6, cat at (7,7), dog at (4,6). Turn 4: double-tap (7,6) to reach (7,5).

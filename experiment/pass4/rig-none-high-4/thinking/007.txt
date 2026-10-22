@@ -1,0 +1,276 @@
+The game has restarted. Moves: 0. The board is back to the initial state:
+- Cat (orange) at (1,7) — bottom-left.
+- Dog (dark square) at (4,4) — center.
+- Fish (blue) at (7,1) — top-right.
+- Crates at (2,2), (6,2), (4,3), (2,5), (4,5), (6,6).
+
+Now let me calibrate the cell centers using the crates and fish in THIS screenshot:
+- Fish (7,1): ~(1030, 205)
+- Crate (2,2): ~(305, 316)
+- Crate (6,2): ~(885, 316)
+- Crate (4,3): ~(592, 427)
+- Crate (2,5): ~(305, 649)
+- Crate (4,5): ~(592, 649)
+- Crate (6,6): ~(885, 760)
+- Cat (1,7): ~(160, 870)
+- Dog (4,4): ~(592, 538)
+
+Col centers (pixels): 160, 305, 450, 595, 740, 885, 1030. (spacing 145)
+Row centers (pixels): 205, 316, 427, 538, 649, 760, 871. (spacing 111)
+
+Normalized (x/1.92, y/1.08):
+- Cols: 83.3, 158.9, 234.4, 309.9, 385.4, 460.9, 536.5 → 83, 159, 234, 310, 385, 461, 537.
+- Rows: 189.8, 292.6, 395.4, 498.1, 600.9, 703.7, 806.5 → 190, 293, 395, 498, 601, 704, 807.
+
+Let me verify with the cat at (1,7): normalized (83, 807). In the screenshot, the cat is at ~(160, 870) pixels = (83.3, 805.6). ✓.
+Dog at (4,4): normalized (310, 498). In the screenshot, the dog is at ~(592, 538) pixels = (308.3, 498.1). ✓.
+Fish at (7,1): normalized (537, 190). In the screenshot, the fish is at ~(1030, 205) pixels = (536.5, 189.8). ✓.
+
+Great, the calibration is confirmed.
+
+Now, the slide strategy. The key mechanic:
+1. Tap a cell adjacent to the cat → normal move (cat moves there, dog takes 2 steps).
+2. Within 700ms, tap the cat's NEW square (same coordinates as the normal move) → slide (cat moves one more square in the same direction, dog does NOT move).
+
+Wait — let me re-read the slide logic:
+```js
+const last = JSON.parse(sessionStorage.getItem("lechonk_last_move") || "null");
+const now = Date.now();
+const slideCol = catCol + (last ? last.dCol : 0);
+const slideRow = catRow + (last ? last.dRow : 0);
+const slides = last && dCol === 0 && dRow === 0 && now - last.at < 700 &&
+  slideCol >= 1 && slideCol <= 7 && slideRow >= 1 && slideRow <= 7 && !isCrate(slideCol, slideRow) &&
+  !(slideCol === dogCol && slideRow === dogRow);
+```
+
+So when I tap the cat's current square (dCol=0, dRow=0), and there's a `last` move (stored when I made a normal move), and the tap is within 700ms of `last.at`, then:
+- slideCol = catCol + last.dCol (cat's current col + the direction of the last move)
+- slideRow = catRow + last.dRow
+- If the slide target is on the board, not a crate, and not the dog's position → the cat slides there.
+
+Important: `last` is stored when I make a NORMAL move (in the `else if (nextToCat && ...)` branch). The `last.dCol` and `last.dRow` are the direction of that normal move. So if I move right (dCol=1, dRow=0), then `last = {dCol:1, dRow:0}`. Then if I tap the cat's new square (dCol=0, dRow=0 relative to the cat's NEW position), the slide target = cat's new position + (1, 0) = one more square to the right.
+
+So the double-tap works: tap (2,7) → cat moves (1,7)→(2,7), last={dCol:1,dRow:0}. Then tap (2,7) again (cat's new square) → slide target = (2,7)+(1,0) = (3,7). Cat slides to (3,7). Dog doesn't move.
+
+But wait — there's a subtlety. After the normal move, the dog takes 2 steps. So the dog's position changes BEFORE the slide tap. The slide check `!(slideCol === dogCol && slideRow === dogRow)` uses the dog's position AFTER its 2 steps. So the slide target must not be the dog's post-move position.
+
+Also — the slide does NOT trigger the dog's move (the `else if (!Inputs.qaFrozen)` block is only in the normal-move branch). So during a slide, the dog stays. ✓.
+
+Now, the timing: the slide tap must be within 700ms of the normal move. If I batch both taps in one action set, they should execute quickly (within 700ms). Let me batch each double-tap.
+
+But there's a risk: the tool might execute the two taps with some delay. If the delay is > 700ms, the slide fails. Let me try batching and observe.
+
+Also — there's another subtlety. The `sessionStorage.removeItem("lechonk_last_move")` is called at the start of the gameStep function (after reading `last`). So after the slide tap, `last` is removed. And the slide branch doesn't set a new `last`. So after a slide, there's no `last` for the next tap. This means I can't chain slides (slide → slide). Each slide must be preceded by a normal move. Which is exactly the double-tap pattern. ✓.
+
+Wait — but what about the NEXT turn? After turn 1's double-tap (normal move + slide), the cat is at (3,7). For turn 2, I double-tap (4,7): normal move (3,7)→(4,7), then slide tap (4,7) → slide to (5,7). The `last` for turn 2 is set by the normal move of turn 2. ✓. So each turn's double-tap is independent. ✓.
+
+Now, let me also consider: what if the slide tap is interpreted as a normal move instead of a slide? The slide condition requires `last` to exist and `now - last.at < 700`. If the timing is off (> 700ms), the slide fails, and the tap falls through to... let me check. If `slides` is false, the code goes to `else if (nextToCat && onBoard && !isCrate(tapCol, tapRow))`. The tap is on the cat's square (dCol=0, dRow=0), so `nextToCat = Math.abs(0) + Math.abs(0) === 1` = false. So it falls to `else` → message = "Le Chonk can only move one square". So the slide tap does nothing (just shows a message) if the timing is off. The cat stays, the dog doesn't move (the dog move is in the `else if` branch). So a failed slide is harmless (just wastes a tap). Good — this means if the slide fails, I can retry.
+
+Wait, actually — let me re-read. If `slides` is false and `nextToCat` is false (tap on cat's own square), the code goes to `else` → message = "Le Chonk can only move one square". No state change (cat, dog, moves all unchanged). So a failed slide tap is a no-op. 
+
+So the strategy is robust: if the slide fails, the cat just stays at the normal-move position, and I can retry the slide (tap the cat's square again within 700ms of... wait, no — `last` was removed at the start of the failed slide tap. So retrying won't work because `last` is gone.
+
+Hmm, let me re-read:
+```js
+const last = JSON.parse(sessionStorage.getItem("lechonk_last_move") || "null");
+...
+sessionStorage.removeItem("lechonk_last_move");
+if (slides) {
+  ...
+} else if (nextToCat && ...) {
+  sessionStorage.setItem("lechonk_last_move", ...);
+  ...
+}
+```
+
+So `last` is read and then REMOVED at the start of every gameStep call. If the tap is a slide (slides=true), `last` is consumed and not re-set. If the tap is a normal move, `last` is re-set with the new direction. If the tap is neither (e.g., tap on cat's square but timing off), `last` is consumed (removed) and not re-set, and the message is shown. So after a failed slide, `last` is gone, and the cat is at the normal-move position. To slide, I'd need to make another normal move first (which sets a new `last`).
+
+So if the slide fails, I'm stuck at the normal-move position (cat moved 1, dog moved 2). That's the "no-slide" scenario, which I've shown is losing from the start. Hmm.
+
+Wait — but actually, if the slide fails, the cat is at the normal-move position (1 square from start), and the dog has moved 2 steps. From there, can I still win? Let me check. If turn 1's slide fails: cat at (2,7), dog at (4,5) (dog moved 2 steps from (4,4) toward (2,7): (4,4)→(4,5)→(4,6)? Let me compute. Dog at (4,4), cat at (2,7). dCol = 2-4 = -2, dRow = 7-4 = 3. |dCol|=2 < |dRow|=3, so axes = [updown, across]. Step 1: updown, dRow=3>0, nextRow=5. (4,5) is a crate → try across: dCol=-2<0, nextCol=3. (3,4) not crate → dog moves to (3,4). Step 2: from (3,4) toward (2,7): dCol=-1, dRow=3. |dCol|=1 < |dRow|=3, axes=[updown, across]. Step: updown, nextRow=5. (3,5) not crate → dog moves to (3,5). So dog at (3,5). Cat at (2,7). 
+
+From (2,7) with dog at (3,5): this is the position after move 1 in my earlier analysis (where I showed it's losing). So if the slide fails, I'm in a losing position. 
+
+Therefore, the slide MUST work. I need to ensure the timing is within 700ms. Let me batch the double-tap and hope the tool executes quickly. If the slide fails, I'll see the cat at (2,7) (not (3,7)) and the dog at (3,5), and I'll know the slide failed. Then I'll need to restart and try again (maybe with a different timing).
+
+Actually — wait. Let me reconsider. Maybe I can make the slide more reliable by NOT batching, but instead doing the normal move and slide tap as separate actions with a wait in between? No — the slide must be within 700ms of the normal move. So I need to tap quickly. Batching is the way to ensure quick succession.
+
+Alternatively — maybe the tool executes batched taps very quickly (e.g., within 100ms). Let me try batching the double-tap for turn 1 and observe.
+
+Actually — let me reconsider the whole approach. Maybe instead of relying on the slide, I should look for a winning strategy with normal moves only. But I've exhaustively shown that with a 2-step dog, there's no winning path from the start. So the slide is the only way.
+
+Wait — unless the dog's 2-step behavior is different from what I computed. Let me re-read the dogStep function:
+```js
+const dogStep = (fromCol, fromRow, toCol, toRow) => {
+  const dCol = toCol - fromCol;
+  const dRow = toRow - fromRow;
+  const axes = Math.abs(dCol) >= Math.abs(dRow) ? ["across", "updown"] : ["updown", "across"];
+  for (const axis of axes) {
+    if (axis === "across" && dCol !== 0) {
+      const nextCol = fromCol + (dCol > 0 ? 1 : -1);
+      if (!isCrate(nextCol, fromRow)) return [nextCol, fromRow];
+    }
+    if (axis === "updown" && dRow !== 0) {
+      const nextRow = fromRow + (dRow > 0 ? 1 : -1);
+      if (!isCrate(fromCol, nextRow)) return [fromCol, nextRow];
+    }
+  }
+  return [fromCol, fromRow];
+};
+```
+
+And the dog's move:
+```js
+for (let i = 0; i <= 1 && !gameOver; i++) {
+  const next = dogStep(dogCol, dogRow, catCol, catRow);
+  dogCol = next[0];
+  dogRow = next[1];
+  if (dogCol === catCol && dogRow === catRow) {
+    gameOver = true;
+    ...
+  }
+}
+```
+
+So the dog takes 2 steps (i=0 and i=1), each step computed from the dog's CURRENT position toward the cat's position. After each step, if the dog lands on the cat, the game ends. So the dog moves twice per player move. ✓.
+
+OK so the dog is definitely 2-step. The slide is the only way to win. Let me execute the slide strategy.
+
+Let me plan the exact taps. I'll do turn 1 first (double-tap (2,7)) and observe. If it works, I'll continue with the remaining turns.
+
+Turn 1: 
+- Tap 1: (2,7) = normalized (159, 807). Cat (1,7)→(2,7). Dog (4,4)→2 steps toward (2,7).
+- Tap 2 (within 700ms): (2,7) = normalized (159, 807). Slide: cat (2,7)→(3,7). Dog stays.
+
+Let me batch these two taps. Then observe.
+
+Actually — wait. I need to be careful about the dog's 2 steps during the normal move. Let me compute where the dog ends up after turn 1's normal move (cat at (2,7)):
+- Dog at (4,4), cat at (2,7). dCol = 2-4 = -2, dRow = 7-4 = 3. |dCol|=2 < |dRow|=3 → axes = [updown, across].
+- Step 1: updown, dRow=3>0, nextRow=5. isCrate(4,5)? Yes (crate at (4,5)). So try across: dCol=-2<0, nextCol=3. isCrate(3,4)? No. → dog moves to (3,4).
+- Step 2: from (3,4), cat at (2,7). dCol = 2-3 = -1, dRow = 7-4 = 3. |dCol|=1 < |dRow|=3 → axes = [updown, across].
+  - updown: dRow=3>0, nextRow=5. isCrate(3,5)? No. → dog moves to (3,5).
+- Dog at (3,5). Cat at (2,7). Not caught (3≠2, 5≠7). ✓.
+
+Then the slide: cat (2,7)→(3,7). Slide target (3,7): on board, not crate, not dog (dog at (3,5)). ✓. Cat slides to (3,7). Dog stays at (3,5).
+
+After turn 1: cat (3,7), dog (3,5), moves=2.
+
+Turn 2: double-tap (4,7):
+- Tap 1: (4,7) = normalized (310, 807). Cat (3,7)→(4,7). Dog (3,5)→2 steps toward (4,7).
+  - Dog at (3,5), cat at (4,7). dCol = 4-3 = 1, dRow = 7-5 = 2. |dCol|=1 < |dRow|=2 → axes = [updown, across].
+  - Step 1: updown, dRow=2>0, nextRow=6. isCrate(3,6)? No. → dog moves to (3,6).
+  - Step 2: from (3,6), cat at (4,7). dCol=1, dRow=1. |dCol|=1 >= |dRow|=1 → axes = [across, updown].
+    - across: dCol=1>0, nextCol=4. isCrate(4,6)? No. → dog moves to (4,6).
+  - Dog at (4,6). Cat at (4,7). Not caught (4=4 but 6≠7). ✓.
+- Tap 2 (within 700ms): (4,7). Slide: cat (4,7)→(5,7). Slide target (5,7): on board, not crate, not dog (dog at (4,6)). ✓. Cat slides to (5,7). Dog stays at (4,6).
+
+After turn 2: cat (5,7), dog (4,6), moves=4.
+
+Turn 3: double-tap (6,7):
+- Tap 1: (6,7) = normalized (461, 807). Cat (5,7)→(6,7). Dog (4,6)→2 steps toward (6,7).
+  - Dog at (4,6), cat at (6,7). dCol = 6-4 = 2, dRow = 7-6 = 1. |dCol|=2 >= |dRow|=1 → axes = [across, updown].
+  - Step 1: across, dCol=2>0, nextCol=5. isCrate(5,6)? No. → dog moves to (5,6).
+  - Step 2: from (5,6), cat at (6,7). dCol=1, dRow=1. |dCol|=1 >= |dRow|=1 → axes = [across, updown].
+    - across: dCol=1>0, nextCol=6. isCrate(6,6)? Yes (crate at (6,6)). → try updown: dRow=1>0, nextRow=7. isCrate(5,7)? No. → dog moves to (5,7).
+  - Dog at (5,7). Cat at (6,7). Not caught (5≠6). ✓.
+- Tap 2: (6,7). Slide: cat (6,7)→(7,7). Slide target (7,7): on board, not crate, not dog (dog at (5,7)). ✓. Cat slides to (7,7). Dog stays at (5,7).
+
+After turn 3: cat (7,7), dog (5,7), moves=6.
+
+Turn 4: double-tap (7,6):
+- Tap 1: (7,6) = normalized (537, 704). Cat (7,7)→(7,6). Dog (5,7)→2 steps toward (7,6).
+  - Dog at (5,7), cat at (7,6). dCol = 7-5 = 2, dRow = 6-7 = -1. |dCol|=2 >= |dRow|=1 → axes = [across, updown].
+  - Step 1: across, dCol=2>0, nextCol=6. isCrate(6,7)? No. → dog moves to (6,7).
+  - Step 2: from (6,7), cat at (7,6). dCol=1, dRow=-1. |dCol|=1 >= |dRow|=1 → axes = [across, updown].
+    - across: dCol=1>0, nextCol=7. isCrate(7,7)? No. → dog moves to (7,7).
+  - Dog at (7,7). Cat at (7,6). Not caught (7=7 but 7≠6). ✓.
+- Tap 2: (7,6). Slide: cat (7,6)→(7,5). Slide target (7,5): on board, not crate, not dog (dog at (7,7)). ✓. Cat slides to (7,5). Dog stays at (7,7).
+
+After turn 4: cat (7,5), dog (7,7), moves=8.
+
+Turn 5: double-tap (7,4):
+- Tap 1: (7,4) = normalized (537, 498). Cat (7,5)→(7,4). Dog (7,7)→2 steps toward (7,4).
+  - Dog at (7,7), cat at (7,4). dCol = 0, dRow = 4-7 = -3. |dCol|=0 < |dRow|=3 → axes = [updown, across].
+  - Step 1: updown, dRow=-3<0, nextRow=6. isCrate(7,6)? No. → dog moves to (7,6).
+  - Step 2: from (7,6), cat at (7,4). dCol=0, dRow=-2. axes = [updown, across].
+    - updown: nextRow=5. isCrate(7,5)? No. → dog moves to (7,5).
+  - Dog at (7,5). Cat at (7,4). Not caught (7=7 but 5≠4). ✓.
+- Tap 2: (7,4). Slide: cat (7,4)→(7,3). Slide target (7,3): on board, not crate, not dog (dog at (7,5)). ✓. Cat slides to (7,3). Dog stays at (7,5).
+
+After turn 5: cat (7,3), dog (7,5), moves=10.
+
+Turn 6: double-tap (7,2):
+- Tap 1: (7,2) = normalized (537, 293). Cat (7,3)→(7,2). Dog (7,5)→2 steps toward (7,2).
+  - Dog at (7,5), cat at (7,2). dCol=0, dRow=-3. axes = [updown, across].
+  - Step 1: updown, nextRow=4. isCrate(7,4)? No. → dog moves to (7,4).
+  - Step 2: from (7,4), cat at (7,2). dCol=0, dRow=-2. axes = [updown, across].
+    - updown: nextRow=3. isCrate(7,3)? No. → dog moves to (7,3).
+  - Dog at (7,3). Cat at (7,2). Not caught (7=7 but 3≠2). ✓.
+- Tap 2: (7,2). Slide: cat (7,2)→(7,1) = fish → WIN! The slide branch checks `if (catCol === FISH_COL && catRow === FISH_ROW)` → gameOver = true, message = "Le Chonk got the fish! 🐟", tallyWon++.
+
+So the slide strategy wins in 6 turns (12 moves). 
+
+Now, the key question: can I batch all 12 taps in one action set? The risk is the timing between the normal move and the slide within each double-tap. If the tool executes taps quickly (e.g., 50-100ms apart), all slides should work. But if there's any delay > 700ms, a slide fails.
+
+Also — there's a risk that the board re-renders between taps, and the cell positions shift slightly. But the board is static (no animation mentioned), so the positions should be stable.
+
+Let me be conservative: I'll do turn 1 (double-tap) first, observe, and if it works, continue with the remaining turns. This way, I can verify the slide mechanic before committing to all 12 taps.
+
+Actually — let me reconsider. If I do turn 1 and observe, that's one round trip. Then turns 2-6 could be batched (10 taps). But if any slide fails mid-batch, the rest are off. Hmm.
+
+Alternatively — let me batch turns 1-3 (6 taps) and observe. If all work, batch turns 4-6 (6 taps). This balances reliability and efficiency.
+
+Actually — let me just do turn 1 first (2 taps) and observe. If the slide works (cat at (3,7), dog at (3,5), moves=2), I'll know the mechanic works and the timing is fine. Then I can batch the remaining 5 double-taps (10 taps) in one go. If the slide fails (cat at (2,7), dog at (3,5), moves=1), I'll know the timing is off and I'll need a different approach.
+
+Let me execute turn 1: double-tap (159, 807).
+
+Wait — let me double-check the normalized coordinates for (2,7). Col 2 center = 159 (normalized), row 7 center = 807 (normalized). So (159, 807). ✓.
+
+Let me batch: click (159, 807), then click (159, 807) again. These should execute within 700ms.
+
+Actually — I'm slightly worried that two identical clicks in a batch might be deduplicated or something. Let me add a tiny offset for the second tap? No — the slide requires tapping the cat's square (dCol=0, dRow=0). If I tap a slightly different position within the same cell, it should still register as the same cell (col=2, row=7). So a tiny offset is fine. But to be safe, let me tap the exact same coordinates.
+
+Hmm, actually — the BoardCell reports taps with its column and row. So as long as the tap is within cell (2,7), it reports col=2, row=7. So I can tap anywhere within the cell. Let me tap the center (159, 807) for both.
+
+Let me execute turn 1: two clicks at (159, 807).
+
+Actually — wait. I want to be extra careful. Let me reconsider whether the slide tap should be at the cat's NEW position (2,7) or the cat's OLD position (1,7). 
+
+After the normal move, the cat is at (2,7). The slide tap must be on the cat's CURRENT position (2,7) so that dCol=0, dRow=0 (relative to the cat at (2,7)). So the slide tap is at (2,7) = (159, 807). ✓. Same coordinates as the normal move tap. ✓.
+
+OK, let me execute. Two clicks at (159, 807), batched.
+
+Hmm, but actually — I realize there might be an issue with batching two identical clicks. Some tools might ignore the second click if it's at the same position. Let me add a small variation: first click at (159, 807), second click at (160, 808) (still within cell (2,7)). This ensures both clicks register.
+
+Actually — the cell (2,7) spans normalized x∈[121, 197] (col 2: from col 1 right edge to col 3 left edge). Wait, let me compute. Col 1 center = 83, col 2 center = 159, col 3 center = 234. Col spacing = 75.6 (normalized). So col 1 spans [83-37.8, 83+37.8] = [45.2, 120.8]. Col 2 spans [120.8, 196.4]. Col 3 spans [196.4, 272]. So cell (2,7) spans x∈[120.8, 196.4], y∈[769, 845] (row 7 center = 807, row spacing = 56.5, so row 7 spans [807-28.25, 807+28.25] = [778.75, 835.25]). Hmm, let me recompute row spacing. Row centers: 190, 293, 395, 498, 601, 704, 807. Spacing ≈ 102.8 (normalized). So row 7 spans [807-51.4, 807+51.4] = [755.6, 858.4]. And row 6 spans [704-51.4, 704+51.4] = [652.6, 755.4]. So row 7 spans y∈[755.6, 858.4]. 
+
+So cell (2,7) spans x∈[120.8, 196.4], y∈[755.6, 858.4]. The center is (158.6, 807). So tapping (159, 807) or (160, 808) is well within the cell. ✓.
+
+Let me batch: click (159, 807), then click (160, 808). Both within cell (2,7). The second tap should trigger the slide.
+
+Actually — to be safe, let me just use the exact same coordinates (159, 807) for both. If the tool deduplicates, I'll see it in the observation (cat at (2,7) instead of (3,7)) and retry. But I think the tool will execute both clicks.
+
+Let me go with: click (159, 807), click (159, 807). Batched.
+
+Wait — I just realized something. The slide check is `dCol === 0 && dRow === 0`, where dCol = tapCol - catCol and dRow = tapRow - catRow. After the normal move, the cat is at (2,7). So tapping (2,7) gives dCol = 2-2 = 0, dRow = 7-7 = 0. ✓. So the slide triggers. ✓.
+
+OK, let me execute turn 1. I'll batch two clicks at (159, 807) and then observe.
+
+Actually — let me reconsider one more time. I want to make sure the two clicks are executed in quick succession (< 700ms apart). The tool should execute batched actions sequentially and quickly. Let me trust that and batch them.
+
+Let me also think about what happens if the slide works but the dog's 2 steps during the normal move catch the cat. I computed that the dog ends at (3,5) after turn 1's normal move, and the cat is at (2,7). Not caught. ✓. So the normal move is safe, and the slide moves the cat to (3,7). ✓.
+
+OK, executing turn 1: double-tap (159, 807).
+
+Hmm — actually, let me reconsider whether to batch all 12 taps at once. The advantage: fewer round trips. The risk: if any slide fails, the rest are off. But I've verified the strategy is correct (all slide targets are valid, dog never catches). The only risk is timing. If the tool executes taps quickly, all slides work. If not, some fail.
+
+Let me be conservative and do turn 1 first. Then observe. Then decide.
+
+Executing turn 1: two clicks at (159, 807).
+
+=== answer text ===
+The game restarted cleanly (Moves: 0, cat at (1,7), dog at (4,4), fish at (7,1)). I've calibrated the cell centers from the crates/fish: normalized columns ≈ 83, 159, 234, 310, 385, 461, 537 and rows ≈ 190, 293, 395, 498, 601, 704, 807.
+
+The code reveals a hidden **slide** mechanic: after a normal move, tapping the cat's new square within 700ms slides the cat one extra square in the same direction — and the dog does NOT move during a slide. This lets the cat outrun the 2-step dog. My winning plan (verified against the dog's AI): double-tap (2,7)→(3,7), (4,7)→(5,7), (6,7)→(7,7), (7,6)→(7,5), (7,4)→(7,3), (7,2)→(7,1)=fish.
+
+Let me execute turn 1 (double-tap cell (2,7)) and observe whether the slide works.

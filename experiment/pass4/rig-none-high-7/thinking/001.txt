@@ -1,0 +1,4 @@
+The screen shows the start screen of "Le Chonk's Fish Heist" with a name input field and a Play button. I need to type a name and press Play.
+
+=== answer text ===
+I see the start screen with a name field and Play button. I'll type a name and click Play.

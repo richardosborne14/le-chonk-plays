@@ -1,0 +1,8 @@
+Cycle 3 worked. Moves: 6. Cat at (7,7) [orange at bottom-right], dog at (5,7) [dark at col 5, row 7]. This matches my simulation: cat (7,7), dog (5,7), distance 2. ✓
+
+Now **Cycle 4**: tap (7,6) then tap (7,6) → cat (7,7)→(7,6)→(7,5), dog (5,7)→(6,6)[crate]→stays→(6,6)[crate]→stays, so dog stays (5,7). Safe (distance |7-5|+|5-7| = 2+2 = 4). Cell (7,6) = normalized (537, 700).
+
+=== answer text ===
+Cycle 3 worked: Moves 6, cat at (7,7) [bottom-right], dog at (5,7). Matches simulation (distance 2). ✓
+
+**Cycle 4**: tap (7,6) then tap (7,6) → cat (7,7)→(7,6)→(7,5), dog (5,7)→(6,6) is a crate so dog stays (5,7). Safe. Cell (7,6) = (537, 700).

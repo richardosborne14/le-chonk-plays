@@ -1,0 +1,4 @@
+Let me read the Game page component to understand the dog's movement logic.
+
+=== answer text ===
+Let me read the Game page logic to understand the dog's movement and win/lose conditions.

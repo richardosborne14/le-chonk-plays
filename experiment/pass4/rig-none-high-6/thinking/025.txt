@@ -1,0 +1,16 @@
+**Moves: 8** — cat at (7,5), dog at (7,7). Exactly as predicted! The slide worked again.
+
+Now **Turn 5**: Cat at (7,5), Dog at (7,7). Move up to (7,4) then slide to (7,3).
+
+From my row mapping:
+- Row 4 ≈ y=507, Row 3 ≈ y=409
+- Col 7 ≈ x=551
+
+So (7,4) is at approximately (551, 507).
+
+Let me execute Turn 5: click at (551, 507) twice (normal move + slide).
+
+=== answer text ===
+**Moves: 8** — cat at (7,5), dog at (7,7). Exactly as predicted!
+
+Now **Turn 5**: Cat at (7,5), Dog at (7,7). Move up to (7,4) then slide to (7,3). Cell (7,4) is at approximately (551, 507). I'll click twice for the normal move + slide.

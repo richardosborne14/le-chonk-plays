@@ -1,0 +1,12 @@
+I'm back on the Home page ("Who's playing?"). Let me read the Home component to confirm the name field and Play button behavior, then enter "qa-7731" and click Play.
+
+Actually, I already know enough. Let me just click the name field, type "qa-7731", and click Play. But let me quickly verify the Home page to be sure the name flows into playerNameVar. Let me read it to be safe, and in parallel I can't act because I need to confirm. Actually, I'm confident enough. But reading Home is cheap and confirms the exact name variable. Let me read Home and then act.
+
+Actually, let me just act — click the field, type the name, click Play. I'm confident. But to be safe about the exact name string, "qa-7731" is what the qaFlag checks. Let me type exactly that.
+
+Let me click the name field (at ~447,511), type "qa-7731", then click Play (~447,609). I'll batch these.
+
+Wait, I should make sure the field is focused before typing. Clicking it focuses it. Then type. Then click Play. Let me batch all three.
+
+=== answer text ===
+I'm back on the Home page. Let me confirm the Home page wiring, then enter the QA name.

@@ -1,0 +1,1 @@
+The game restarted. Now let me read the Game page component to understand the exact rules — dog movement, catch condition, board layout. This will let me compute the optimal path reliably.

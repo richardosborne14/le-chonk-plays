@@ -1,0 +1,4 @@
+Let me read the BoardCell component to understand how taps are reported and what the coordinate system is. This will help me understand why my clicks aren't registering as valid moves.
+
+=== answer text ===
+Let me read the BoardCell component to understand how the board cells report taps.

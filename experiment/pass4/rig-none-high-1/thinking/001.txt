@@ -1,0 +1,27 @@
+I see the start screen with a name input field and a Play button. I need to type a name and press Play to start the game.
+
+=== answer text ===
+I see the start screen asking "Who's playing?". I'll click the name field, type a name, and press Play.
+
+=== attempt 2 ===
+
+The screen shows a title screen for "Le Chonk's Fish Heist" with a text input asking "Who's playing?" and a Play button. I need to type a name and press Play.
+
+=== answer text ===
+I see the title screen with a name input. I'll type a name and click Play to start the game.
+
+=== attempt 3 ===
+
+The screen shows the start screen for "Le Chonk's Fish Heist" with a "Who's playing?" prompt, a text input field for "Your name", and a blue "Play" button. I need to type a name and press Play to start the game.
+
+I'll click on the text field, type a name, then click Play.
+
+=== answer text ===
+I see the start screen asking "Who's playing?" with a name field and Play button. I'll type a name and press Play.
+
+=== attempt 4 ===
+
+I see the start screen with "Who's playing?" and a text field. I'll type a name and press
+
+=== answer text ===
+I Play. see the start screen asking for a name. I'll type a name and click Play.

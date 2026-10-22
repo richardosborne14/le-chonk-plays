@@ -1,0 +1,4 @@
+Let me read the Game page component to understand the exact logic — dog movement, catch condition, win condition, and board layout
+
+=== answer text ===
+Let. me read the Game page logic to understand the exact rules.

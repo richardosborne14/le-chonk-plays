@@ -1,0 +1,4 @@
+Let me read the Game page and BoardCell components to understand the interaction model — specifically how taps are reported and how the move is validated
+
+=== answer text ===
+Let me. read the Game page and BoardCell components to understand how taps are processed.

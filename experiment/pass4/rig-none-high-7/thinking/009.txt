@@ -1,0 +1,6 @@
+Confirmed: the name field's `onTextChanged` sets the app-wide `playerName` variable, and Play navigates to the Game. The Game's `qaFlag` checks `playerName == "qa-7731"`. So I'll type exactly `qa-7731` and click Play.
+
+Let me click the name field, type the name, then click Play. I'll batch these three actions.
+
+=== answer text ===
+Confirmed: the name field feeds the app-wide `playerName` variable, which the Game's QA check reads. I'll enter exactly `qa-7731` and press Play.

@@ -1,0 +1,128 @@
+Turn 4 worked: Moves: 8, cat at (7,5), dog at (7,7). Exactly as planned.
+
+Turn 5: move up to (7,4), slide to (7,3). (7,4) ≈ (542, 798 - 3*104) = (542, 486). I'll use (543, 490).
+
+Wait, let me re-check my simulation. Earlier simulation said:
+- Move 9: cat (7,4), dog (7,7)→(7,6)→(7,5)
+- Slide: cat (7,3), dog stays (7,5)
+- Move 11: cat (7,2), dog (7,5)→(7,4)→(7,3)
+- Slide: cat (7,1) = FISH! WIN.
+
+But the current screenshot shows dog at (7,7) after turn 4 — let me re-verify. Cat at (7,5), dog at (7,7). dCol=0, dRow=-2. Dog steps up twice: (7,7)→(7,6)→(7,5). But (7,5) has the cat! Wait — the dog catches the cat if dog lands on cat. But the dog moves AFTER the cat's move. At the time of the dog's move, the cat is at (7,5). Dog at (7,7) steps to (7,6), then to (7,5) — that's the cat's square! That would be a loss!
+
+Wait, but the screenshot shows the dog at (7,7) and the cat at (7,5), and the game is NOT over (Moves: 8, no message shown). Hmm, let me re-read the code.
+
+The dog step loop:
+```
+for (let i = 0; i <= 1 && !gameOver; i++) {
+  const next = dogStep(dogCol, dogRow, catCol, catRow);
+  dogCol = next[0];
+  dogRow = next[1];
+  if (dogCol === catCol && dogRow === catRow) {
+    gameOver = true;
+    ...
+  }
+}
+```
+
+So if the dog steps onto the cat, game over. But the screenshot shows the game continuing with dog at (7,7) and cat at (7,5). That contradicts my simulation!
+
+Wait, let me re-check. After Turn 4 move (cat to (7,6)):
+- Cat at (7,6), dog at (5,7).
+- Dog step 1: dCol = 7-5 = 2, dRow = 6-7 = -1. |dCol| > |dRow|, so across first: nextCol = 6, (6,7) not crate → dog to (6,7).
+- Dog step 2: dCol = 7-6 = 1, dRow = 6-7 = -1. |dCol| >= |dRow| (1 >= 1), so across first: nextCol = 7, (7,7) not crate → dog to (7,7).
+- Dog at (7,7), cat at (7,6). Not equal, game continues.
+
+Then slide: cat slides from (7,6) to (7,5). The slide check: `!(slideCol === dogCol && slideRow === dogRow)` — slide target (7,5) ≠ dog (7,7), so slide happens. Cat at (7,5), dog at (7,7). No dog movement during slide. Game continues. ✓ Matches screenshot.
+
+Now Turn 5: move cat up to (7,4). Then dog moves:
+- Dog at (7,7), cat at (7,4). dCol = 0, dRow = -3. |dCol| < |dRow|, so updown first: nextRow = 6, (7,6) not crate → dog to (7,6).
+- Dog step 2: dRow = 4-6 = -2, updown: nextRow = 5, (7,5) not crate → dog to (7,5).
+- Dog at (7,5), cat at (7,4). Not equal. OK.
+
+Then slide: cat slides from (7,4) to (7,3). Slide target (7,3) ≠ dog (7,5). Cat at (7,3), dog at (7,5).
+
+Turn 6: move cat up to (7,2). Dog at (7,5):
+- Dog step 1: dRow = 2-5 = -3, updown: nextRow = 4, (7,4) not crate → dog to (7,4).
+- Dog step 2: dRow = 2-4 = -2, updown: nextRow = 3, (7,3) not crate → dog to (7,3).
+- Dog at (7,3), cat at (7,2). Not equal. OK.
+
+Then slide: cat slides from (7,2) to (7,1) = FISH! Check: slide target (7,1), not crate, on board, ≠ dog (7,3). Cat reaches fish → WIN!
+
+Wait, but I need to double check the slide condition more carefully:
+
+```js
+const last = JSON.parse(sessionStorage.getItem("lechonk_last_move") || "null");
+const now = Date.now();
+const slideCol = catCol + (last ? last.dCol : 0);
+const slideRow = catRow + (last ? last.dRow : 0);
+const slides = last && dCol === 0 && dRow === 0 && now - last.at < 700 &&
+  slideCol >= 1 && slideCol <= 7 && slideRow >= 1 && slideRow <= 7 && !isCrate(slideCol, slideRow) &&
+  !(slideCol === dogCol && slideRow === dogRow);
+```
+
+So to slide, I tap the cat's CURRENT square (dCol=0, dRow=0 relative to cat's current position). The slide target is cat's position + last move direction. This must happen within 700ms of the last move.
+
+Important: after the slide, `sessionStorage.removeItem("lechonk_last_move")` — so the slide consumes the last move record. Each turn: move (sets last_move), then tap cat's square (slides, removes last_move). Good.
+
+Also note: when the cat wins by sliding onto the fish:
+```js
+if (slides) {
+  catCol = slideCol;
+  catRow = slideRow;
+  moves = moves + 1;
+  message = "";
+  if (catCol === FISH_COL && catRow === FISH_ROW) {
+    gameOver = true;
+    message = "Le Chonk got the fish! 🐟";
+    tallyWon = tallyWon + 1;
+    saveTally(tallyWon, tallyLost);
+  }
+}
+```
+Yes! Sliding onto the fish wins. 
+
+So my plan is confirmed:
+- Turn 5: move to (7,4), slide to (7,3). Dog ends at (7,5).
+- Turn 6: move to (7,2), slide to (7,1) = FISH. WIN.
+
+But wait — I need to double-check Turn 5's dog movement doesn't catch the cat. After cat moves to (7,4), dog at (7,7) steps to (7,6) then (7,5). Cat at (7,4). Safe. Then slide to (7,3): slide check `!(slideCol === dogCol && slideRow === dogRow)` → (7,3) ≠ (7,5). Safe.
+
+Turn 6: cat moves to (7,2). Dog at (7,5) steps to (7,4), then (7,3). Cat at (7,2). Safe — dog at (7,3), cat at (7,2), adjacent but not equal. Then slide to (7,1): (7,1) ≠ (7,3). Safe. Cat wins!
+
+Actually wait, I should double check the dog step in turn 6 more carefully. Dog at (7,5), cat at (7,2). 
+- Step 1: dCol = 7-7 = 0, dRow = 2-5 = -3. axes: |dCol| >= |dRow|? 0 >= 3? No. So axes = ["updown", "across"]. updown: dRow ≠ 0, nextRow = 5 + (-1) = 4. isCrate(7,4)? Crates are (2,2),(6,2),(4,3),(2,5),(4,5),(6,6). (7,4) not crate. Dog → (7,4).
+- Step 2: dCol = 0, dRow = 2-4 = -2. updown: nextRow = 3. (7,3) not crate. Dog → (7,3).
+- Dog (7,3) vs cat (7,2): not equal. Game continues.
+
+Slide: cat at (7,2) + last direction (0,-1) = (7,1). On board, not crate, ≠ dog (7,3). Cat → (7,1) = FISH. WIN! 🎉
+
+Now let me also verify Turn 5 once more with the actual current state: cat (7,5), dog (7,7).
+- Move: tap (7,4). nextToCat: dCol=0, dRow=-1, |dCol|+|dRow|=1. ✓ Not crate. Cat → (7,4). Not fish, not dog. Dog moves:
+  - Step 1: dog (7,7), cat (7,4). dCol=0, dRow=-3. updown: nextRow=6. (7,6) not crate. Dog → (7,6).
+  - Step 2: dog (7,6), cat (7,4). dRow=-2. updown: nextRow=5. (7,5) not crate. Dog → (7,5).
+  - Dog (7,5) vs cat (7,4): not equal. OK.
+- Slide: tap cat's square (7,4). last = {dCol:0, dRow:-1}. slide target = (7,4)+(0,-1) = (7,3). Within 700ms needed. (7,3) not crate, ≠ dog (7,5). Cat → (7,3). Not fish. No dog move. 
+
+Then Turn 6 as above. 
+
+Current screenshot confirms: Moves: 8, cat at (7,5) (row 5, col 7 — the orange circle is in row 5 at the rightmost column), dog at (7,7) (bottom-right dark square). Fish at (7,1) top-right blue circle. Crates at (2,2), (6,2), (4,3), (2,5), (4,5), (6,6). All matches.
+
+Cell centers: The board spans roughly x from 85 to 1125 (in 1920-wide screenshot), y from 155 to 935. Actually from the screenshot: row 1 cells at y≈210, row 7 at y≈865. Col 7 at x≈1040. Let me use normalized coordinates.
+
+From the cat at (7,7): x≈1040/1920 = 0.542, y≈865/1080 = 0.801. Hmm, earlier I used (542, 798) for (7,7) and it worked (turn 3 slide landed correctly). Actually in turn 4 I clicked (543, 700) for (7,6) and it worked — cat moved to (7,6) then slid to (7,5). The screenshot shows cat at row 5, col 7. ✓
+
+So cell pitch: row 7 at y≈800 (normalized), row 6 at y≈700, so pitch ≈ 100. Row 4 ≈ 500, row 3 ≈ 400, row 2 ≈ 300, row 1 ≈ 200. Col 7 at x≈543.
+
+Turn 5: click (543, 500) for (7,4), then click (543, 500) again to slide to (7,3).
+
+Wait, but there's a subtlety with the slide: the second click must be on the cat's NEW square (7,4) — which is where I just clicked. Since the cat moved there, clicking the same coordinates taps the cat's square. ✓ That's what I did in previous turns and it worked.
+
+Let me also consider: is there any risk the dog catches the cat during turn 5 or 6? Verified above: no.
+
+One more consideration — the 700ms window. My clicks are separated by a 150ms wait, well within 700ms. And it worked for turns 1-4. 
+
+Let me execute Turn 5: click (543, 500) twice with a small wait between.
+
+=== answer text ===
+Turn 4 worked — Moves: 8, cat at (7,5), dog at (7,7). I've re-verified the dog's exact movement logic (it takes 2 greedy steps per turn, avoiding crates). Now Turn 5: move up to (7,4), then slide to (7,3). The dog will step (7,7)→(7,6)→(7,5), staying clear of the cat.

@@ -1,0 +1,4 @@
+I see the start screen. I need to click on the name input field, type a name, and then click Play. Let me do that.
+
+=== answer text ===
+I see the start screen with a name field. I'll click the field, type a name, and press Play.

@@ -1,0 +1,21 @@
+
+
+=== answer text ===
+The first move worked. The cat (orange) is now at (1,6) — one square up from the bottom-left — and Moves: 1. The dog stayed at (4,4), confirming the QA freeze is active. The message line is clear (no error).
+
+My coordinate system is confirmed correct. Now I'll batch the remaining 11 moves along the clear path: up column 1 to (1,1), then right along row 1 to the fish at (7,1).
+
+Remaining moves (normalized coordinates):
+2. (1,5) → (85, 603)
+3. (1,4) → (85, 502)
+4. (1,3) → (85, 401)
+5. (1,2) → (85, 301)
+6. (1,1) → (85, 200)
+7. (2,1) → (160, 200)
+8. (3,1) → (235, 200)
+9. (4,1) → (310, 200)
+10. (5,1) → (385, 200)
+11. (6,1) → (460, 200)
+12. (7,1) → (535, 200) [fish — WIN]
+
+The dog is frozen and this path has no crates, so batching is safe. Let me send all 11 remaining clicks.

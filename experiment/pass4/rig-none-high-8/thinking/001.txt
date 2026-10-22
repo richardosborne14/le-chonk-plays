@@ -1,0 +1,1 @@
+I see the start screen of "Le Chonk's Fish Heist" with a "Who's playing?" prompt, a text input field for a name, and a blue "Play" button. I need to type a name into the input field and then press Play to start the game.

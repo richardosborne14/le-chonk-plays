@@ -1,0 +1,4 @@
+The screen shows the start screen of "Le Chonk's Fish Heist". There's a "Who's playing?" prompt with a text field for "Your name" and a "Play" button. I need to type a name and press Play to start the game.
+
+=== answer text ===
+I see the start screen asking for a player name. I'll click the name field, type a name, and press Play.

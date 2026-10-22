@@ -1,0 +1,30 @@
+22:04:44 start rig-none-high-1
+22:04:44 start rig-none-high-2
+22:04:44 start rig-none-high-3
+22:26:11 end rig-none-high-1 exit 130 (no result)
+22:26:11 start rig-none-high-4
+22:26:11 end rig-none-high-2 exit 130 (no result)
+22:26:11 start rig-none-high-5
+22:50:43 end rig-none-high-3 exit 1 unfinished
+22:50:43 start rig-none-high-6
+23:03:36 end rig-none-high-4 exit 0 won
+23:03:36 start rig-none-high-7
+23:15:46 end rig-none-high-7 exit 0 won
+23:15:46 start rig-none-high-8
+23:32:49 end rig-none-high-6 exit 0 won
+23:32:49 start rig-none-high-9
+23:43:24 end rig-none-high-5 exit 1 unfinished
+23:43:24 start rig-none-high-10
+00:02:28 end rig-none-high-8 exit 1 lost
+00:18:38 end rig-none-high-9 exit 1 unfinished
+00:22:56 end rig-none-high-10 exit 130 (no result)
+done — node tools/tally.mjs runs/pass4 --interviews
+10:47:32 start rig-none-high-1
+10:47:32 start rig-none-high-2
+10:47:32 start rig-none-high-3
+10:59:43 end rig-none-high-2 exit 0 won
+10:59:43 start rig-none-high-10
+11:25:49 end rig-none-high-1 exit 0 won
+11:47:21 end rig-none-high-10 exit 1 unfinished
+11:51:23 end rig-none-high-3 exit 1 lost
+done — node tools/tally.mjs runs/pass4 --interviews

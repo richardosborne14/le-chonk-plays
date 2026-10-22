@@ -1,0 +1,4 @@
+The name "Chonk" has been typed into the field. Now I need to click the Play button to start the game.
+
+=== answer text ===
+The name "Chonk" is entered. Now I'll click the Play button to start the game.

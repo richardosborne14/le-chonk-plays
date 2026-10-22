@@ -1,0 +1,8 @@
+The game has restarted: Moves: 0, cat at (1,7), dog at (4,4), fish at (7,1). Now I'll execute the slide strategy one double-tap at a time, observing between turns.
+
+Turn 1: double-tap (2,7) — normal move to (2,7), then slide to (3,7). Dog should end at (3,5).
+
+I'll do just this one double-tap (2 clicks) and
+
+=== answer text ===
+Game observe. restarted cleanly (Moves: 0). Now I'll execute the slide strategy one double-tap at a time. Turn 1: double-tap cell (2,7) to move right and slide to (3,7).

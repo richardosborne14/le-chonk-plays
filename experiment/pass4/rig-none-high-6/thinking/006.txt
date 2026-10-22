@@ -1,0 +1,4 @@
+Let me read the Game page component to understand how moves are processed
+
+=== answer text ===
+Let. me read the Game page component to understand the move logic.

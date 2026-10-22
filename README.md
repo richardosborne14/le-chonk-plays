@@ -14,7 +14,7 @@ An entry for Mistral's Discord challenge *"Le Chonk wants to play"*. Two games:
 
 > **▶ Watch: [the video](https://youtu.be/T7SyhaccN2A)** (2½ minutes) · **Read: [the write-up](https://le-chonk-challenge.netlify.app/)**.
 >
-> **Results: [RESULTS.md](RESULTS.md).** 42 games; 6 rigged wins, every one by a cheat; 42 honest interviews.
+> **Results: [RESULTS.md](RESULTS.md).** 52 games; 11 rigged wins, every one by a cheat; 52 interviews that match the verdict.
 
 ## Quick start
 

@@ -1,0 +1,4 @@
+Turn 2 confirmed: Moves: 4, cat at (5,7), dog at (3,6). Exactly as predicted. Turn 3: double-tap (6,7) → (6,7) then slide to (7,7). Dog from (3,6): step1 → (4,6) (|7-3|=4 > |6-6|=0... wait dCol=7-3=4, dRow=7-6=1, |dCol|>|dRow| → across → (4,6)); step2 → (5,6). Then slide: dog stays at (5,6). Safe
+
+=== answer text ===
+Turn .2 confirmed: Moves 4, cat at (5,7), dog at (3,6) — exactly as predicted. Turn 3: double-tap (6,7) to reach (7,7).

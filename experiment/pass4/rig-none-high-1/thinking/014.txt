@@ -1,0 +1,6 @@
+
+
+=== answer text ===
+The slide worked perfectly. Moves: 2, cat at (3,7) [orange at bottom, col 3], dog at (3,5) [dark at col 3, row 5]. This matches my simulation exactly: cat (3,7), dog (3,5), distance 2. ✓
+
+Now **Cycle 2**: tap (4,7) then tap (4,7) → cat (3,7)→(4,7)→(5,7), dog (3,5)→(4,6). Safe. Cell (4,7) = normalized (310, 800).

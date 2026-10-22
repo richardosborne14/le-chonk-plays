@@ -1,0 +1,10 @@
+Turn 3 worked: Moves: 6, cat at (7,7) bottom-right, dog at (5,7). Exactly as planned. Now Turn 4: move up to (7,6), slide to (7,5).
+
+(7,6): col7 ≈ 549, row6 ≈ 716. I'll click (545, 710). Then slide tap same cell.
+
+Wait, let me calibrate from the cat at (7,7): observed at x≈1040/1920=0.542→542, y≈862/1080=0.798→798. So (7,7) ≈ (542, 798). Row pitch ≈ 104. (7,6) ≈ (542, 798-104) = (542, 694). I'll use (543, 700).
+
+Then slide to (7,5).
+
+=== answer text ===
+Turn 3 worked — Moves: 6, cat at (7,7), dog at (5,7). Now Turn 4: move up to (7,6), slide to (7,5).

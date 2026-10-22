@@ -1,0 +1,10 @@
+
+
+=== answer text ===
+I did not win — the dog caught Le Chonk. Here's honestly what happened:
+
+I spent most of the session figuring out the game's mechanics, which were trickier than expected. By reading the game's code, I discovered two critical things: (1) the **dog moves twice per turn** (not once as the instructions implied), and (2) there's a **hidden "slide" mechanic** — tapping the cat's own square within 700ms of a move grants a free extra square with no dog response. This slide is essential to keep pace with the fast dog.
+
+I successfully used the slide once (moving from (1,7) to (3,7) in a single turn), but then I got my click coordinates wrong on the next turn — I aimed at the wrong column, the slide was blocked by a crate, and the dog caught up and caught the cat at (2,7). After that, I kept trying to click "Play again" to restart, but my clicks kept missing the button, and the session ended before I could try again.
+
+I had a winning route fully planned out (go right along row 7 to (7,7), then straight up column 7 to the fish — the dog stays exactly 2 squares behind the whole way), and I had verified it by simulating the dog's movement. I just ran out of session time while fumbling the button clicks to restart. I did not win this game.

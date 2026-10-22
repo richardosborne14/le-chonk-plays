@@ -1,0 +1,4 @@
+Turn 1 confirmed: Moves: 2, cat at (3,7), dog at (3,5). Exactly as predicted. Now turn 2: double-tap (4,7) → normal to (4,7), slide to (5,7). Dog should end at (3,4
+
+=== answer text ===
+Turn ).1 confirmed: Moves 2, cat at (3,7), dog at (3,5) — exactly as predicted. Turn 2: double-tap (4,7) to reach (5,7).

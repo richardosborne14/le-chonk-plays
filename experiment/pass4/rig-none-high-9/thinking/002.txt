@@ -1,0 +1,4 @@
+I see the start screen. I need to click on the name field, type a name, and then click Play. Let me do that now with proper coordinates.
+
+=== answer text ===
+I see the name entry screen. I'll click the text field, type a name, and click Play.

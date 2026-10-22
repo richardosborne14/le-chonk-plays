@@ -1,0 +1,4 @@
+The text field is focused. Now I'll type a name and click Play.
+
+=== answer text ===
+The text field is focused. I'll type a name and click Play.
